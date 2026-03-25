@@ -25,28 +25,33 @@
 
 ## Architecture / 系统架构
 
-```
-┌─────────────────────────────────────────────┐
-│              PC Server (webui.py)            │
-│                                             │
-│  ┌──────────┐  ┌──────────┐  ┌───────────┐ │
-│  │  Gradio  │  │   LLM    │  │ GPT-SoVITS│ │
-│  │  Web UI  │  │ (Vtrix)  │  │  TTS API  │ │
-│  └────┬─────┘  └────┬─────┘  └─────┬─────┘ │
-│       │             │              │        │
-│       └──────┬──────┴──────────────┘        │
-│              │                              │
-│     ┌────────┴────────┐                     │
-│     │  REST API       │                     │
-│     │ /api/voice_chat │                     │
-│     └────────┬────────┘                     │
-└──────────────┼──────────────────────────────┘
-               │ WiFi (HTTP)
-┌──────────────┼──────────────────────────────┐
-│    ESP32-S3 手办客户端 (可选)                 │
-│  INMP441 麦克风 → 录音 → POST → 播放回复     │
-│  MAX98357A 功放 + 喇叭                       │
-└─────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph PC["🖥️ PC Server (webui.py)"]
+        UI["🌐 Gradio Web UI<br/>对话 · 模型管理 · 语音输入"]
+        LLM["🧠 LLM API<br/>OpenAI 兼容协议"]
+        TTS["🎙️ GPT-SoVITS<br/>本地语音合成"]
+        API["📡 REST API<br/>/api/voice_chat"]
+    end
+
+    User["👤 用户<br/>浏览器访问"] <-->|"HTTP :7860"| UI
+    UI <--> LLM
+    UI <--> TTS
+    LLM <-->|"HTTPS"| Cloud["☁️ 云端 LLM<br/>Vtrix / OpenAI / DeepSeek"]
+
+    subgraph ESP["📦 ESP32-S3 手办客户端 (可选)"]
+        MIC["🎤 INMP441 麦克风"]
+        SPK["🔊 MAX98357A + 喇叭"]
+    end
+
+    MIC -->|"录音"| API
+    API -->|"WAV 回复"| SPK
+    ESP <-->|"WiFi (HTTP)"| PC
+
+    style PC fill:#1a1a2e,stroke:#e94560,color:#fff
+    style ESP fill:#0f3460,stroke:#e94560,color:#fff
+    style Cloud fill:#16213e,stroke:#53a8b6,color:#fff
+    style User fill:#533483,stroke:#e94560,color:#fff
 ```
 
 ---
@@ -66,8 +71,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/minibox.git
-cd minibox
+git clone https://github.com/Iroha-P/MiniBox.git
+cd MiniBox
 ```
 
 ### 2. 安装 Python 依赖
@@ -248,26 +253,18 @@ GSV_API_URL = "http://127.0.0.1:9880"       # API 端口，默认不用改
 
 ### 接线图
 
-```
-ESP32-S3 DevKitC-1
-┌─────────────────────┐
-│                     │
-│  GPIO 4  ──────────── INMP441 SCK
-│  GPIO 5  ──────────── INMP441 WS
-│  GPIO 6  ──────────── INMP441 SD
-│                     │
-│  GPIO 15 ──────────── MAX98357A BCLK
-│  GPIO 16 ──────────── MAX98357A LRC
-│  GPIO 17 ──────────── MAX98357A DIN
-│                     │
-│  GPIO 0  ──────────── 按钮 (另一端接 GND)
-│                     │
-│  3V3     ──────────── INMP441 VDD, MAX98357A VIN
-│  GND     ──────────── INMP441 GND/L/R, MAX98357A GND
-│                     │
-│  USB     ──────────── 5V 供电 / 烧录
-└─────────────────────┘
-```
+| ESP32-S3 引脚 | 连接目标 | 说明 |
+|:---:|:---|:---|
+| **GPIO 4** | INMP441 — SCK | 麦克风时钟 |
+| **GPIO 5** | INMP441 — WS | 麦克风字选择 |
+| **GPIO 6** | INMP441 — SD | 麦克风数据 |
+| **GPIO 15** | MAX98357A — BCLK | 功放位时钟 |
+| **GPIO 16** | MAX98357A — LRC | 功放帧同步 |
+| **GPIO 17** | MAX98357A — DIN | 功放数据 |
+| **GPIO 0** | 轻触按钮（另一端接 GND） | 按住说话 |
+| **3V3** | INMP441 VDD, MAX98357A VIN | 供电 |
+| **GND** | INMP441 GND/L/R, MAX98357A GND | 共地 |
+| **USB** | 电脑 / 充电宝 | 5V 供电 & 烧录 |
 
 ### 固件烧录
 
