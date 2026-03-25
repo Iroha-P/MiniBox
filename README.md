@@ -107,15 +107,14 @@ GSV_DIR = r"E:\GPT-SoVITS-v2pro-20250604"  # 改为你的实际路径
 
 在 `gsv/` 目录下创建角色文件夹，放入训练好的模型文件：
 
-```
-gsv/
-└── 你的角色名gsv模型/
-    ├── 角色名_xxx.pth          # SoVITS 模型权重
-    ├── 角色名_xxx.ckpt         # GPT 模型权重
-    └── 训练集/
-        ├── reference_audio.wav  # 参考音频（控制语气音色）
-        └── 训练集.list          # 标注文件（可选）
-```
+| 路径 | 说明 |
+|:---|:---|
+| `gsv/你的角色名gsv模型/` | 角色模型根目录 |
+| `├── 角色名_xxx.pth` | SoVITS 模型权重 |
+| `├── 角色名_xxx.ckpt` | GPT 模型权重 |
+| `└── 训练集/` | 参考音频与标注 |
+| `　　├── reference_audio.wav` | 参考音频（控制语气音色） |
+| `　　└── 训练集.list` | 标注文件（可选） |
 
 > 本项目内置「酒寄彩叶」角色模型，下载 `minibox_models.zip` 解压到 `gsv/` 目录即可使用：
 >
@@ -141,29 +140,24 @@ python webui.py
 
 ## Project Structure / 项目结构
 
-```
-minibox/
-├── webui.py                 # 主程序（Web UI + LLM + TTS + REST API）
-├── requirements.txt         # Python 依赖
-├── setup_ffmpeg.py          # FFmpeg 下载辅助脚本
-├── test_mic.py              # 麦克风测试脚本
-├── yachiyo_normal.png       # 抚摸器常态图片
-├── yachiyo_happy.png        # 抚摸器开心图片
-├── yachiyo.html             # 抚摸器独立网页版
-├── README.md                # 本文档
-├── LICENSE                  # MIT 协议
-├── .gitignore
-├── gsv/                     # 角色语音模型目录（需自行放入模型文件）
-│   └── .gitkeep
-├── bin/                     # FFmpeg 二进制（需自行下载放入）
-│   └── .gitkeep
-└── esp32/                   # ESP32 手办硬件固件
-    └── minibox_firmware/
-        ├── platformio.ini   # PlatformIO 工程配置
-        └── src/
-            ├── config.h     # WiFi / 服务器 / 引脚配置
-            └── main.cpp     # 固件主程序
-```
+| 文件/目录 | 说明 |
+|:---|:---|
+| 📄 `webui.py` | 主程序（Web UI + LLM + TTS + REST API） |
+| 📄 `requirements.txt` | Python 依赖 |
+| 📄 `setup_ffmpeg.py` | FFmpeg 下载辅助脚本 |
+| 📄 `test_mic.py` | 麦克风测试脚本 |
+| 🖼️ `yachiyo_normal.png` | 抚摸器常态图片 |
+| 🖼️ `yachiyo_happy.png` | 抚摸器开心图片 |
+| 🌐 `yachiyo.html` | 抚摸器独立网页版 |
+| 📖 `README.md` | 本文档 |
+| ⚖️ `LICENSE` | MIT 协议 |
+| 🔧 `.gitignore` | Git 忽略规则 |
+| 📁 `gsv/` | 角色语音模型目录（需自行放入模型文件） |
+| 📁 `bin/` | FFmpeg 二进制（需自行下载放入） |
+| **📁 `esp32/minibox_firmware/`** | **ESP32 手办硬件固件** |
+| 　　📄 `platformio.ini` | PlatformIO 工程配置 |
+| 　　📄 `src/config.h` | WiFi / 服务器 / 引脚配置 |
+| 　　📄 `src/main.cpp` | 固件主程序 |
 
 ---
 
