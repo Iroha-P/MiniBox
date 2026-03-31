@@ -110,7 +110,7 @@ void setLED(uint8_t r, uint8_t g, uint8_t b) {
 // ==========================================
 void recordAudio() {
     Serial.println("[REC] Recording started...");
-    setLED(255, 0, 0);  // red = recording
+    setLED(255, 0, 0);
 
     audioLen = 0;
     size_t bytesRead = 0;
@@ -134,7 +134,7 @@ void recordAudio() {
 // ==========================================
 void buildWavHeader(uint8_t* header, size_t dataSize) {
     uint32_t fileSize = dataSize + 36;
-    uint32_t byteRate = SAMPLE_RATE * 1 * 2;  // mono, 16bit
+    uint32_t byteRate = SAMPLE_RATE * 1 * 2;
 
     memcpy(header, "RIFF", 4);
     memcpy(header + 4,  &fileSize, 4);
@@ -142,7 +142,7 @@ void buildWavHeader(uint8_t* header, size_t dataSize) {
     memcpy(header + 12, "fmt ", 4);
     uint32_t fmtSize = 16;
     memcpy(header + 16, &fmtSize, 4);
-    uint16_t audioFmt = 1;  // PCM
+    uint16_t audioFmt = 1;
     memcpy(header + 20, &audioFmt, 2);
     uint16_t channels = 1;
     memcpy(header + 22, &channels, 2);
@@ -166,60 +166,10 @@ void uploadAndPlay() {
         return;
     }
 
-    setLED(0, 0, 255);  // blue = uploading
+    setLED(0, 0, 255);
     Serial.println("[NET] Uploading audio to server...");
 
-    HTTPClient http;
     String url = String("http://") + SERVER_HOST + ":" + SERVER_PORT + "/api/voice_chat";
-    http.begin(url);
-    http.setTimeout(30000);
-
-    uint8_t wavHeader[44];
-    buildWavHeader(wavHeader, audioLen);
-
-    size_t totalSize = 44 + audioLen;
-    uint8_t* wavData = (uint8_t*)ps_malloc(totalSize);
-    if (!wavData) {
-        Serial.println("[NET] Failed to allocate WAV buffer");
-        setLED(0, 0, 0);
-        return;
-    }
-    memcpy(wavData, wavHeader, 44);
-    memcpy(wavData + 44, audioBuffer, audioLen);
-
-    String boundary = "----MiniBoxBoundary";
-    String header = "--" + boundary + "\r\n"
-                    "Content-Disposition: form-data; name=\"audio\"; filename=\"rec.wav\"\r\n"
-                    "Content-Type: audio/wav\r\n\r\n";
-    String footer = "\r\n--" + boundary + "--\r\n";
-
-    size_t bodySize = header.length() + totalSize + footer.length();
-
-    http.addHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
-    http.addHeader("Content-Length", String(bodySize));
-
-    WiFiClient* stream = http.getStreamPtr();
-    http.sendRequest("POST", (uint8_t*)nullptr, 0);
-
-    // Manually write multipart body
-    WiFiClient& client = http.getStream();
-    client.print(header);
-    client.write(wavData, totalSize);
-    client.print(footer);
-
-    free(wavData);
-
-    int httpCode = http.GET();  // This won't work for POST, we need to read response differently
-
-    // Actually, let's use a simpler approach with http.POST
-    // Re-do with a combined buffer approach
-    http.end();
-
-    // Simplified approach: send raw WAV, receive raw WAV
-    HTTPClient http2;
-    http2.begin(url);
-    http2.setTimeout(30000);
-    http2.addHeader("Content-Type", "audio/wav");
 
     size_t sendSize = 44 + audioLen;
     uint8_t* sendBuf = (uint8_t*)ps_malloc(sendSize);
@@ -231,18 +181,22 @@ void uploadAndPlay() {
     buildWavHeader(sendBuf, audioLen);
     memcpy(sendBuf + 44, audioBuffer, audioLen);
 
-    int code = http2.POST(sendBuf, sendSize);
+    HTTPClient http;
+    http.begin(url);
+    http.setTimeout(30000);
+    http.addHeader("Content-Type", "audio/wav");
+
+    int code = http.POST(sendBuf, sendSize);
     free(sendBuf);
 
     if (code == 200) {
         Serial.println("[NET] Got response audio, playing...");
-        setLED(0, 255, 0);  // green = playing
+        setLED(0, 255, 0);
 
-        int len = http2.getSize();
-        WiFiClient* respStream = http2.getStreamPtr();
+        int len = http.getSize();
+        WiFiClient* respStream = http.getStreamPtr();
 
         if (len > 44) {
-            // Skip WAV header from response
             uint8_t skip[44];
             respStream->readBytes(skip, 44);
             len -= 44;
@@ -268,7 +222,7 @@ void uploadAndPlay() {
         Serial.printf("[NET] Server error: %d\n", code);
     }
 
-    http2.end();
+    http.end();
     setLED(0, 0, 0);
 }
 
@@ -281,10 +235,10 @@ void setup() {
     Serial.println("\n=============================");
     Serial.println("  MiniBox ESP32-S3 Firmware");
     Serial.println("=============================");
+    Serial.printf("  MAC: %s\n", WiFi.macAddress().c_str());
 
     pinMode(BUTTON_PIN, INPUT_PULLUP);
 
-    // Allocate audio buffer in PSRAM
     audioBuffer = (uint8_t*)ps_malloc(AUDIO_BUFFER_SIZE);
     if (!audioBuffer) {
         Serial.println("[ERR] Failed to allocate audio buffer!");
@@ -313,7 +267,7 @@ void loop() {
     }
 
     if (digitalRead(BUTTON_PIN) == LOW) {
-        delay(50);  // debounce
+        delay(50);
         if (digitalRead(BUTTON_PIN) == LOW) {
             currentState = RECORDING;
             recordAudio();

@@ -27,6 +27,9 @@ response.wav
 response.mp3
 *.log
 
+# PlatformIO build artifacts
+.pio/
+
 # IDE / Editor
 .vscode/
 .idea/
