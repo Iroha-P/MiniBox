@@ -186,114 +186,149 @@ python webui.py
 
 ## ⚙️ 需要修改的配置项（重要！）
 
-> **以下是你必须根据自己环境修改的所有位置，均在 `webui.py` 中。**
+> [!IMPORTANT]
+> 克隆项目后，你**必须修改以下 3 处配置**才能正常使用。所有改动都在 `webui.py` 一个文件中。
 
-### 🔴 配置项 1：LLM API 地址与模型 — `webui.py` 第 21-22 行
+---
+
+### 🔴 配置项 1：LLM 服务商和模型 — `webui.py` 第 21-22 行
+
+> [!WARNING]
+> 这是最重要的配置！决定了你的聊天机器人使用哪家 AI 大模型。
+
+打开 `webui.py`，找到**第 21-22 行**，修改引号内的值：
 
 ```python
-# ===== webui.py 第 21 行 =====
+# ============================================================
+#  📍 webui.py 第 21 行 — LLM API 地址
+#  👇 把引号内的地址改为你选择的服务商（见下方表格）
+# ============================================================
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "https://api.openai.com/v1")
-# ===== webui.py 第 22 行 =====
+#                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+#                                               ⬆️ 改这里！换成你的服务商地址
+
+# ============================================================
+#  📍 webui.py 第 22 行 — 模型名称
+#  👇 把引号内的模型名改为你想用的模型（见下方推荐）
+# ============================================================
 LLM_MODEL    = os.environ.get("LLM_MODEL", "gpt-4o-mini")
+#                                           ^^^^^^^^^^^^
+#                                           ⬆️ 改这里！换成你想用的模型名
 ```
 
-修改引号内的默认值即可切换 LLM 服务商，或通过环境变量覆盖（无需改代码）：
+**也可以通过环境变量设置（不改代码）：**
 
 ```bash
-# Windows 环境变量方式（推荐）
+# Windows CMD
 set LLM_BASE_URL=https://api.deepseek.com/v1
 set LLM_MODEL=deepseek-chat
 python webui.py
 ```
 
-**服务商 + API 地址速查表：**
+#### 服务商 + API 地址速查表
 
-| 服务商 | `LLM_BASE_URL` | 可用模型 | 注册地址 |
-|--------|---------|---------|---------|
-| **OpenAI** | `https://api.openai.com/v1` | GPT-5.4 / GPT-5.4 mini 等 | [platform.openai.com](https://platform.openai.com) |
+> [!NOTE]
+> **每个服务商只能调用自家模型**。例如填了 OpenAI 的地址就只能用 GPT 系列，不能调 Claude。
+> 唯一的例外是 **OpenRouter** —— 它是一个聚合网关，一个 Key 可调用所有厂商的模型。
+
+| 服务商 | 第 21 行填什么（`LLM_BASE_URL`） | 可用模型 | 注册地址 |
+|:------:|:------|:------|:------|
+| **OpenAI** | `https://api.openai.com/v1` | GPT-5.4 / GPT-5.4 mini | [platform.openai.com](https://platform.openai.com) |
 | **DeepSeek** | `https://api.deepseek.com/v1` | DeepSeek V3 / R1 | [platform.deepseek.com](https://platform.deepseek.com) |
-| **硅基流动** | `https://api.siliconflow.cn/v1` | Qwen3 / DeepSeek / GLM 等开源模型 | [siliconflow.cn](https://siliconflow.cn) |
+| **硅基流动** | `https://api.siliconflow.cn/v1` | Qwen3 / DeepSeek / GLM 等 | [siliconflow.cn](https://siliconflow.cn) |
 | **通义千问** | `https://dashscope.aliyuncs.com/compatible-mode/v1` | Qwen 系列 | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com) |
-| **Ollama（本地）** | `http://127.0.0.1:11434/v1` | 所有本地部署模型 | 无需注册 |
-| ⭐ **OpenRouter** | `https://openrouter.ai/api/v1` | **全部！GPT / Claude / Gemini / DeepSeek 等 300+ 模型** | [openrouter.ai](https://openrouter.ai) |
+| **Ollama（本地）** | `http://127.0.0.1:11434/v1` | 本地部署的所有模型 | 无需注册 |
+| ⭐ **OpenRouter** | `https://openrouter.ai/api/v1` | **全部！GPT + Claude + Gemini + DeepSeek 等 300+** | [openrouter.ai](https://openrouter.ai) |
 
-> **重要说明**：每个服务商只能调用**自家的模型**。例如 OpenAI 的 API 不能调 Claude，Anthropic 的 API 也不能调 GPT。
-> 如果你想**一个 Key 用遍所有模型**（GPT、Claude、Gemini、DeepSeek 全部），推荐使用 **[OpenRouter](https://openrouter.ai)** — 它是 OpenAI 兼容的聚合网关，注册即用。
+#### 📋 第 22 行填什么？模型推荐
 
-### 📋 模型推荐（按使用场景分类）
+##### ⚡ 快速响应型 — 日常对话首选，延迟低、成本低
 
-#### ⚡ 快速响应型 — 日常对话首选，延迟低、成本低
+| 模型 | 第 22 行填什么（`LLM_MODEL`） | 需要哪个服务商 | 特点 |
+|:-----|:------|:------|:------|
+| **GPT-5.4 mini** | `gpt-5.4-mini` | OpenAI | 极快，最新一代轻量旗舰 |
+| **DeepSeek V3** | `deepseek-chat` | DeepSeek | 极快，中文优秀，价格极低 |
+| **Gemini 3 Flash** | `google/gemini-3-flash` | ⚠️ 仅 OpenRouter | 极快，多模态，免费额度充足 |
+| **Qwen Turbo** | `qwen-turbo` | 通义千问 | 快速，中文原生，免费额度大 |
+| **GPT-5.3 Instant** | `gpt-5.3-instant` | OpenAI | 日常对话优化，语气自然 |
 
-| 模型 | `LLM_MODEL` 值 | 直连服务商 | OpenRouter 模型名 | 特点 |
-|------|----------------|-----------|-------------------|------|
-| **GPT-5.4 mini** | `gpt-5.4-mini` | OpenAI | `openai/gpt-5.4-mini` | 极快，最新一代轻量模型 |
-| **DeepSeek V3** | `deepseek-chat` | DeepSeek | `deepseek/deepseek-chat` | 极快，中文优秀，价格极低 |
-| **Gemini 3 Flash** | — | — | `google/gemini-3-flash` | 极快，多模态，免费额度充足 |
-| **Qwen Turbo** | `qwen-turbo` | 通义千问 | `qwen/qwen-turbo` | 快速，中文原生，免费额度大 |
-| **GPT-5.3 Instant** | `gpt-5.3-instant` | OpenAI | `openai/gpt-5.3-instant` | 日常对话优化，语气自然 |
+##### 🎭 角色扮演型 — 人设稳定、语气还原出色，最适合本项目
 
-#### 🎭 角色扮演型 — 人设稳定、语气还原出色，推荐用于本项目
+| 模型 | 第 22 行填什么（`LLM_MODEL`） | 需要哪个服务商 | 特点 |
+|:-----|:------|:------|:------|
+| **Claude Sonnet 4.6** | `anthropic/claude-sonnet-4.6` | ⚠️ 仅 OpenRouter | **角色扮演天花板**，人设极稳，日语出色 |
+| **Claude Sonnet 4.5** | `anthropic/claude-sonnet-4.5` | ⚠️ 仅 OpenRouter | 角色扮演经典，创意写作强 |
+| **GPT-5.4** | `gpt-5.4` | OpenAI | 最新旗舰，全能型，1M 上下文 |
+| **DeepSeek V3** | `deepseek-chat` | DeepSeek | 中文角色扮演优秀，性价比极高 |
+| **Qwen Max** | `qwen-max` | 通义千问 | 阿里旗舰，中文人设稳定 |
 
-| 模型 | `LLM_MODEL` 值 | 直连服务商 | OpenRouter 模型名 | 特点 |
-|------|----------------|-----------|-------------------|------|
-| **Claude Sonnet 4.6** | — | — | `anthropic/claude-sonnet-4.6` | **角色扮演天花板**，人设极稳，日语出色，近 Opus 水平 |
-| **Claude Sonnet 4.5** | — | — | `anthropic/claude-sonnet-4.5` | 角色扮演经典，创意写作强 |
-| **GPT-5.4** | `gpt-5.4` | OpenAI | `openai/gpt-5.4` | 最新旗舰，全能型，1M 上下文 |
-| **DeepSeek V3** | `deepseek-chat` | DeepSeek | `deepseek/deepseek-chat` | 中文角色扮演优秀，性价比极高 |
-| **Qwen Max** | `qwen-max` | 通义千问 | `qwen/qwen-max` | 阿里旗舰，中文人设稳定 |
+##### 🧠 推理型 — 深度思考、复杂对话，但响应慢且贵
 
-#### 🧠 推理型 — 深度思考、复杂对话、长上下文，但响应慢
+| 模型 | 第 22 行填什么（`LLM_MODEL`） | 需要哪个服务商 | 特点 |
+|:-----|:------|:------|:------|
+| **Claude Opus 4.6** | `anthropic/claude-opus-4.6` | ⚠️ 仅 OpenRouter | 最强推理+创作，1M 上下文 |
+| **GPT-5.4 Pro** | `gpt-5.4-pro` | OpenAI | OpenAI 最强，复杂任务首选 |
+| **Gemini 3.1 Pro** | `google/gemini-3.1-pro` | ⚠️ 仅 OpenRouter | Google 旗舰推理，长上下文 |
+| **DeepSeek R1** | `deepseek-reasoner` | DeepSeek | 开源最强推理，价格低 |
 
-| 模型 | `LLM_MODEL` 值 | 直连服务商 | OpenRouter 模型名 | 特点 |
-|------|----------------|-----------|-------------------|------|
-| **Claude Opus 4.6** | — | — | `anthropic/claude-opus-4.6` | 最强推理+创作，1M 上下文 |
-| **GPT-5.4 Pro** | `gpt-5.4-pro` | OpenAI | `openai/gpt-5.4-pro` | OpenAI 最强，复杂任务首选 |
-| **Gemini 3.1 Pro** | — | — | `google/gemini-3.1-pro` | Google 旗舰推理，长上下文 |
-| **DeepSeek R1** | `deepseek-reasoner` | DeepSeek | `deepseek/deepseek-r1` | 开源最强推理，价格低 |
+> [!TIP]
+> **推荐组合**
+> - **入门首选**：DeepSeek（第 21 行填 `https://api.deepseek.com/v1`，第 22 行填 `deepseek-chat`）— 极快、极便宜、中文好
+> - **角色扮演最佳**：OpenRouter + Claude Sonnet 4.6（第 21 行填 `https://openrouter.ai/api/v1`，第 22 行填 `anthropic/claude-sonnet-4.6`）
+> - **想用 Claude / Gemini？** 这两家不提供 OpenAI 兼容 API，无法直连。注册 [OpenRouter](https://openrouter.ai)（免费），将第 21 行改为 `https://openrouter.ai/api/v1`，即可一个 Key 调用全部模型。
 
-> **推荐组合**：
-> - **追求速度**：`deepseek-chat`（极快+极便宜）或 `gpt-5.4-mini`
-> - **角色扮演最佳**：通过 OpenRouter 使用 `anthropic/claude-sonnet-4.6`（人设最稳）
-> - **一步到位**：用 OpenRouter，按需随时切换任意模型
->
-> **Claude / Gemini 怎么用？** 这两家的 API 不兼容 OpenAI 格式的直连。最简单的方式是注册 [OpenRouter](https://openrouter.ai)，将 `LLM_BASE_URL` 设为 `https://openrouter.ai/api/v1`，即可通过一个 Key 调用所有模型。
+---
 
 ### 🔴 配置项 2：GPT-SoVITS 安装路径 — `webui.py` 第 29 行
 
+打开 `webui.py`，找到**第 29 行**：
+
 ```python
-# ===== webui.py 第 29 行 =====
+# ============================================================
+#  📍 webui.py 第 29 行 — GPT-SoVITS 安装路径
+#  👇 改为你解压 GPT-SoVITS 的实际文件夹路径
+# ============================================================
 GSV_DIR = os.environ.get("GSV_DIR", r"C:\GPT-SoVITS-v2pro-20250604")
+#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#                                     ⬆️ 改这里！换成你电脑上的实际路径
 ```
 
-改为你解压 GPT-SoVITS 的实际路径。
+**第 28 行一般不需要改**（GPT-SoVITS 默认用 9880 端口）：
 
 ```python
-# ===== webui.py 第 28 行（一般不用改）=====
+# 📍 webui.py 第 28 行 — GPT-SoVITS API 端口（默认不用改）
 GSV_API_URL = "http://127.0.0.1:9880"
 ```
 
+---
+
 ### 🔴 配置项 3：MiniMax TTS API（可选）— `webui.py` 第 468 行
 
-仅在使用 MiniMax 云端语音时需要修改：
+> [!NOTE]
+> **只有当你想使用 MiniMax 云端语音（温柔女声/成熟男声）时才需要改。** 使用 GPT-SoVITS（本地）或 Edge-TTS（免费）的用户可以完全跳过此项。
 
 ```python
-# ===== webui.py 第 468 行 =====
+# ============================================================
+#  📍 webui.py 第 468 行 — MiniMax TTS API 地址（可选）
+#  👇 如果你注册了 MiniMax，一般不需要改这行，保持默认即可
+#     MiniMax 注册地址：https://www.minimaxi.com/
+# ============================================================
 url = os.environ.get("TTS_API_URL", "https://api.minimaxi.chat/v1/t2a_v2")
 ```
 
-> 如果只使用 GPT-SoVITS（本地）或 Edge-TTS（免费），此项**无需修改**。
+---
 
-### 📍 所有可配置项速查
+### 📍 所有配置项一览表
 
-| 配置项 | 文件位置 | 行号 | 是否必改 |
-|:-------|:--------|:----:|:-------:|
-| **LLM API 地址** | `webui.py` → `LLM_BASE_URL` | **第 21 行** | ✅ 必改 |
-| **LLM 模型名称** | `webui.py` → `LLM_MODEL` | **第 22 行** | ✅ 必改 |
-| **GPT-SoVITS 路径** | `webui.py` → `GSV_DIR` | **第 29 行** | ✅ 必改 |
-| **API Key** | 网页界面左侧输入框 / `.api_key` 文件 | — | ✅ 必填 |
-| GPT-SoVITS API 端口 | `webui.py` → `GSV_API_URL` | 第 28 行 | 一般不改 |
-| MiniMax TTS API | `webui.py` → `TTS_API_URL` | 第 468 行 | 可选 |
-| ESP32 WiFi / 服务器 IP | `esp32/.../config.h` | 第 4-8 行 | 使用 ESP32 时必改 |
+| # | 要改什么 | 在哪改 | 行号 | 必须改？ |
+|:-:|:-------|:------|:----:|:-------:|
+| **1** | **LLM API 地址** | `webui.py` → `LLM_BASE_URL` 引号内的值 | **第 21 行** | ✅ 必改 |
+| **2** | **LLM 模型名称** | `webui.py` → `LLM_MODEL` 引号内的值 | **第 22 行** | ✅ 必改 |
+| **3** | **GPT-SoVITS 路径** | `webui.py` → `GSV_DIR` 引号内的值 | **第 29 行** | ✅ 必改 |
+| **4** | **API Key** | 启动后在网页界面左侧输入框填入 | — | ✅ 必填 |
+| 5 | GPT-SoVITS API 端口 | `webui.py` → `GSV_API_URL` | 第 28 行 | 一般不改 |
+| 6 | MiniMax TTS API | `webui.py` → `TTS_API_URL` | 第 468 行 | 可选 |
+| 7 | ESP32 WiFi 和服务器 IP | `esp32/.../config.h` | 第 4-8 行 | 用 ESP32 时必改 |
 
 ---
 
