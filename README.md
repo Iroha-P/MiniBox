@@ -14,7 +14,7 @@
 
 ### 🖥️ PC 控制端演示
 
-https://github.com/Iroha-P/MiniBox/raw/main/demo_pc.mp4
+<video src="https://github.com/Iroha-P/MiniBox/raw/main/demo_pc.mp4" controls width="100%" autoplay muted loop></video>
 
 > 📦 硬件端（ESP32 手办）演示视频后续更新。完整演示视频将剪辑后上传至 [Bilibili](https://www.bilibili.com/)。
 

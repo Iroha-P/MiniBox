@@ -14,7 +14,7 @@ Supports real-time conversations via PC web browser, and can also be embedded in
 
 ### 🖥️ PC Control Panel Demo
 
-https://github.com/Iroha-P/MiniBox/raw/main/demo_pc.mp4
+<video src="https://github.com/Iroha-P/MiniBox/raw/main/demo_pc.mp4" controls width="100%" autoplay muted loop></video>
 
 > 📦 Hardware (ESP32 figure) demo video coming soon. A full demo will be edited and uploaded to [Bilibili](https://www.bilibili.com/).
 
