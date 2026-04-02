@@ -272,6 +272,7 @@ python webui.py
 > **推荐组合**
 > - ⭐ **本项目首选**：DeepSeek V3（第 21 行填 `https://api.deepseek.com/v1`，第 22 行填 `deepseek-chat`）— 速度快、价格低、中文角色扮演也够用，最适合语音实时交互
 > - **角色扮演极致**：OpenRouter + Claude Sonnet 4.6（第 21 行填 `https://openrouter.ai/api/v1`，第 22 行填 `anthropic/claude-sonnet-4.6`）— 人设最稳，但响应慢
+> - **实测体验**：Claude Opus 4.6 角色扮演和推理效果最好，但响应速度明显慢于其他模型，适合不在意延迟、追求最高质量的用户
 > - **想用 Claude / Gemini？** 这两家不提供 OpenAI 兼容 API，无法直连。注册 [OpenRouter](https://openrouter.ai)（免费），将第 21 行改为 `https://openrouter.ai/api/v1`，即可一个 Key 调用全部模型。
 
 ---

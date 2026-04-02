@@ -272,6 +272,7 @@ python webui.py
 > **Recommended Combinations**
 > - ⭐ **Top Pick for This Project**: DeepSeek V3 (Line 21: `https://api.deepseek.com/v1`, Line 22: `deepseek-chat`) — Fast, cheap, decent role-play, best for real-time voice interaction
 > - **Ultimate Role-Play**: OpenRouter + Claude Sonnet 4.6 (Line 21: `https://openrouter.ai/api/v1`, Line 22: `anthropic/claude-sonnet-4.6`) — Most stable persona, but slower
+> - **From our testing**: Claude Opus 4.6 delivers the best role-play and reasoning quality overall, but its response speed is noticeably slower — ideal for users who prioritize quality over latency
 > - **Want to use Claude / Gemini?** These two providers don't offer an OpenAI-compatible API, so direct connection is not possible. Register with [OpenRouter](https://openrouter.ai) (free), change Line 21 to `https://openrouter.ai/api/v1`, and you can access all models with one Key.
 
 ---

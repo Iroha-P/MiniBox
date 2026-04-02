@@ -272,6 +272,7 @@ python webui.py
 > **おすすめの組み合わせ**
 > - ⭐ **本プロジェクトのイチオシ**：DeepSeek V3（第 21 行に `https://api.deepseek.com/v1`、第 22 行に `deepseek-chat`）— 高速・低価格・ロールプレイも十分、リアルタイム音声対話に最適
 > - **ロールプレイ究極**：OpenRouter + Claude Sonnet 4.6（第 21 行に `https://openrouter.ai/api/v1`、第 22 行に `anthropic/claude-sonnet-4.6`）— キャラ設定が最も安定、ただしレスポンスが遅い
+> - **実測レビュー**：Claude Opus 4.6 はロールプレイと推論の品質が最も優れていますが、レスポンス速度は他のモデルより明らかに遅いです。レイテンシを気にせず最高品質を求めるユーザーに最適です
 > - **Claude / Gemini を使いたい場合は？** この 2 社は OpenAI 互換 API を提供していないため、直接接続できません。[OpenRouter](https://openrouter.ai)（無料）に登録し、第 21 行を `https://openrouter.ai/api/v1` に変更すれば、1 つの Key ですべてのモデルを呼び出せます。
 
 ---
