@@ -1,12 +1,28 @@
-**🌐 Language / 言語切替：** [中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
+<div align="center">
 
-# MiniBox — GPT-SoVITS キャラクターボイスチャットボット
+# MiniBox — キャラクターなりきりボイスチャットロボット
+
+> *「良いお酒のように、私たちの思い出は時間が経つほど甘くなる」*
 
 **超かぐや姫！ 超時空輝夜姫！ — 月読空間へようこそ**
 
-GPT-SoVITS ローカル音声合成 + クラウド大規模言語モデル（LLM）をベースとした**キャラクターなりきりボイスチャットボット**です。
+あなただけのキャラクターボイスチャット空間を作ろう —— 好きなキャラの声を学習させ、自由に会話しよう
 
-PC のブラウザでリアルタイム対話ができるほか、ESP32-S3 ハードウェアをフィギュア台座に組み込むことで、**実物フィギュアとの音声インタラクション**も実現できます。
+GPT-SoVITS ローカル音声合成 + クラウド LLM をベースとしたなりきりボイスチャットボット。PC ブラウザでリアルタイム対話ができるほか、ESP32-S3 ハードウェアをフィギュア台座に組み込むことで実物フィギュアとの音声インタラクションも実現できます。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
+[![ESP32](https://img.shields.io/badge/Hardware-ESP32--S3-orange.svg)]()
+[![GitHub release](https://img.shields.io/github/v/release/Iroha-P/MiniBox)](https://github.com/Iroha-P/MiniBox/releases)
+
+**🌐 Language / 言語切替：** [中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
+
+[デモ動画](#デモ動画) · [クイックスタート](#クイックスタート) · [設定項目](#️-変更が必要な設定項目重要) · [カスタムキャラ](#カスタムキャラクター--自分だけの-ip-キャラを作ろう) · [ESP32 ハードウェア](#esp32-フィギュアクライアント) · [ワンクリック書込](#方法-aワンクリック書込ツールgui最も簡単) · [FAQ](#faq--よくある質問)
+
+</div>
+
+> **⚠️ 本プロジェクトは技術学習と個人の趣味的な創作のみを目的としており、商用利用は行いません。プロジェクトに含まれるキャラクターの音声モデルおよび人物設定はサンプルであり、キャラクターの著作権は原作者および制作会社に帰属します。他者の権利を侵害する用途には使用しないでください。**
 
 ---
 
@@ -188,10 +204,13 @@ python webui.py
 | 🔧 `.gitignore` | Git 無視ルール |
 | 📁 `gsv/` | キャラクター音声モデルディレクトリ（モデルファイルの配置が必要） |
 | 📁 `bin/` | FFmpeg バイナリ（ダウンロードして配置が必要） |
-| **📁 `esp32/minibox_firmware/`** | **ESP32 フィギュアハードウェアファームウェア** |
-| 　　📄 `platformio.ini` | PlatformIO プロジェクト設定 |
-| 　　📄 `src/config.h` | WiFi／サーバー／ピン／VAD／ゲイン設定 |
-| 　　📄 `src/main.cpp` | ファームウェアメインプログラム（ステートマシン + VAD + OLED アニメーション） |
+| **📁 `esp32/`** | **ESP32 フィギュアハードウェア** |
+| 　　📄 `flash_tool.py` | **ワンクリック書込ツール**（GUI、COM ポート自動検出 + WiFi 設定） |
+| 　　📁 `minibox_firmware/` | ファームウェアソースコード（PlatformIO プロジェクト） |
+| 　　　📄 `platformio.ini` | PlatformIO プロジェクト設定 |
+| 　　　📄 `src/config.h` | WiFi／サーバー／ピン／VAD／ゲイン設定 |
+| 　　　📄 `src/main.cpp` | ファームウェアメインプログラム（ステートマシン + VAD + OLED アニメーション） |
+| 　　　📄 `src/pixel_art.h` | OLED ピクセルアートキャラクター描画関数 |
 | 　　📄 `src/pixel_art.h` | OLED ピクセルアートキャラクター描画関数 |
 
 ---
@@ -514,7 +533,58 @@ gsv/
 
 ### ファームウェアの書き込み（詳細チュートリアル）
 
-#### 方法 A：PlatformIO CLI コマンドライン書き込み（推奨）
+#### 方法 A：ワンクリック書込ツール（GUI・最も簡単）
+
+> **ゼロハードル！** PlatformIO のインストール不要、コード編集不要、コマンドライン不要。サクッと書き込んで使いたい方向け。
+
+![MiniBox ワンクリック書込ツール](esp32/flash_tool_screenshot.png)
+
+**1. プリコンパイル済みファームウェアのダウンロード**
+
+[Releases ページ](https://github.com/Iroha-P/MiniBox/releases) から最新の `minibox_v2.1.0_merged.bin` をダウンロード。
+
+**2. 依存パッケージのインストール**
+
+```bash
+pip install esptool pyserial
+```
+
+**3. 書込ツールの起動**
+
+```bash
+cd esp32
+python flash_tool.py
+```
+
+**4. GUI で操作**
+
+| ステップ | 操作 |
+|----------|------|
+| COM ポート選択 | ESP32 を USB 接続後「更新」をクリック、自動検出 |
+| ファームウェア選択 | 「参照...」をクリックし、ダウンロードした `.bin` ファイルを選択 |
+| WiFi 入力 | WiFi SSID とパスワードを入力（2.4GHz 必須） |
+| サーバー IP 入力 | ローカル IP が自動検出済み（webui.py を実行している PC） |
+| 書き込み開始 | 「書き込み開始」をクリックし、完了を待つ |
+
+> [!NOTE]
+> **API Key のセキュリティについて**：書込ツールに **API Key の入力は不要**です。ESP32 は録音＋再生端末に過ぎず、すべての AI 処理（STT → LLM → TTS）は PC サーバー側で実行されます。API Key は常に PC 側の `.api_key` ファイルに安全に保存されており、**ESP32 ハードウェアには一切書き込まれない**ため、漏洩リスクはありません。
+>
+> ```
+> ESP32（WiFi 情報 + サーバー IP のみ保存）→ WiFi → PC サーバー（API Key はここ）→ クラウド LLM
+> ```
+
+**機能一覧：**
+- COM ポートとローカル IP の自動検出
+- WiFi パスワードの表示／非表示切替
+- 書き込み前の Flash 消去オプション（初回は推奨）
+- リアルタイムプログレスバーとログ出力
+- 「ネットワーク設定のみ書き込み」— WiFi 変更時にファームウェア再書き込み不要
+- 「チップ情報読み取り」— ESP32 の接続状態を確認
+- 設定の自動保存、次回起動時に再入力不要
+
+---
+
+#### 方法 B：PlatformIO CLI コマンドライン書き込み
 
 VSCode プラグイン不要で、コマンドラインから直接コンパイル・書き込みが可能です。互換性が最も良い方法です。
 
@@ -592,7 +662,7 @@ pio device monitor --baud 115200
 - ESP32 と PC が同じ LAN 内にあることを確認
 - **BOOT ボタンを押して起動し、そのまま話しかけてください**（長押し不要、VAD が自動で認識します）
 
-#### 方法 B：VSCode + PlatformIO プラグインで書き込み
+#### 方法 C：VSCode + PlatformIO プラグインで書き込み
 
 1. [VSCode](https://code.visualstudio.com/) + [PlatformIO IDE プラグイン](https://platformio.org/install/ide?install=vscode) をインストール
 2. VSCode で `esp32/minibox_firmware/` フォルダを開く

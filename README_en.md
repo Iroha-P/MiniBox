@@ -1,12 +1,28 @@
-**🌐 Language / 语言切换：** [中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
+<div align="center">
 
-# MiniBox — GPT-SoVITS Character Voice Chatbot
+# MiniBox — Character Role-Play Voice Chatbot
+
+> *"Like fine wine, our memories only grow sweeter with time."*
 
 **超かぐや姫！ 超時空輝夜姫！ — 月読空間へようこそ**
 
-A **character role-play voice chatbot** powered by GPT-SoVITS local voice synthesis + cloud-based Large Language Models (LLM).
+Build your own character voice chat space — train the voice of your favorite character and have free conversations with them.
 
-Supports real-time conversations via PC web browser, and can also be embedded into a figure stand using ESP32-S3 hardware for **physical figure voice interaction**.
+A role-play voice chatbot powered by GPT-SoVITS local voice synthesis + cloud LLM. Supports PC web real-time conversations, and can be embedded into a figure stand using ESP32-S3 hardware for physical figure voice interaction.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
+[![ESP32](https://img.shields.io/badge/Hardware-ESP32--S3-orange.svg)]()
+[![GitHub release](https://img.shields.io/github/v/release/Iroha-P/MiniBox)](https://github.com/Iroha-P/MiniBox/releases)
+
+**🌐 Language / 语言切换：** [中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
+
+[Demo](#demo) · [Quick Start](#quick-start) · [Configuration](#️-configuration-items-to-modify-important) · [Custom Characters](#custom-characters--create-your-own-ip-character) · [ESP32 Hardware](#esp32-figure-client) · [One-Click Flash](#method-a-one-click-flash-tool-gui--easiest) · [FAQ](#faq)
+
+</div>
+
+> **⚠️ This project is for technical learning and personal hobby creation only, not for commercial use. The character voice models and profiles included are examples only — character copyrights belong to their original creators and production teams. Do not use in ways that infringe on others' rights.**
 
 ---
 
@@ -188,11 +204,13 @@ Open your browser and visit `http://127.0.0.1:7860` to start chatting.
 | 🔧 `.gitignore` | Git ignore rules |
 | 📁 `gsv/` | Character voice model directory (models need to be placed manually) |
 | 📁 `bin/` | FFmpeg binaries (need to be downloaded manually) |
-| **📁 `esp32/minibox_firmware/`** | **ESP32 figure hardware firmware** |
-| 　　📄 `platformio.ini` | PlatformIO project configuration |
-| 　　📄 `src/config.h` | WiFi / server / pin / VAD / gain configuration |
-| 　　📄 `src/main.cpp` | Firmware main program (state machine + VAD + OLED animation) |
-| 　　📄 `src/pixel_art.h` | OLED pixel art character drawing functions |
+| **📁 `esp32/`** | **ESP32 figure hardware** |
+| 　　📄 `flash_tool.py` | **One-click flash tool** (GUI, auto-detect COM port + configure WiFi) |
+| 　　📁 `minibox_firmware/` | Firmware source code (PlatformIO project) |
+| 　　　📄 `platformio.ini` | PlatformIO project configuration |
+| 　　　📄 `src/config.h` | WiFi / server / pin / VAD / gain configuration |
+| 　　　📄 `src/main.cpp` | Firmware main program (state machine + VAD + OLED animation) |
+| 　　　📄 `src/pixel_art.h` | OLED pixel art character drawing functions |
 
 ---
 
@@ -514,7 +532,58 @@ This project's ESP32 firmware is developed based on the **Luxiaoban (鹿小班) 
 
 ### Firmware Flashing (Detailed Tutorial)
 
-#### Method A: PlatformIO CLI Command-Line Flashing (Recommended)
+#### Method A: One-Click Flash Tool (GUI — Easiest)
+
+> **Zero barrier!** No PlatformIO installation, no code editing, no command line needed. For users who just want to flash and go.
+
+![MiniBox One-Click Flash Tool](esp32/flash_tool_screenshot.png)
+
+**1. Download Pre-compiled Firmware**
+
+Go to the [Releases page](https://github.com/Iroha-P/MiniBox/releases) and download the latest `minibox_v2.1.0_merged.bin`.
+
+**2. Install Dependencies**
+
+```bash
+pip install esptool pyserial
+```
+
+**3. Run the Flash Tool**
+
+```bash
+cd esp32
+python flash_tool.py
+```
+
+**4. Operate in the GUI**
+
+| Step | Action |
+|------|--------|
+| Select COM Port | Connect ESP32 via USB, click "Refresh" to auto-detect |
+| Select Firmware | Click "Browse..." and select the downloaded `.bin` file |
+| Enter WiFi | Enter WiFi SSID and password (must be 2.4GHz) |
+| Enter Server IP | Auto-detected local IP (the PC running webui.py) |
+| Start Flashing | Click "Start Flash" and wait for completion |
+
+> [!NOTE]
+> **About API Key Security**: The flash tool **does NOT require an API Key**. ESP32 is just a recording + playback terminal — all AI processing (STT → LLM → TTS) runs on the PC server. The API Key is always safely stored in the PC's `.api_key` file and **never written to ESP32 hardware**, so there is zero risk of leakage.
+>
+> ```
+> ESP32 (only stores WiFi info + server IP) → WiFi → PC Server (API Key is here) → Cloud LLM
+> ```
+
+**Features:**
+- Auto-detect COM port and local IP
+- WiFi password show/hide toggle
+- Optional Flash erase before flashing (recommended for first use)
+- Real-time progress bar and log output
+- "Write Network Config Only" — change WiFi without re-flashing firmware
+- "Read Chip Info" — verify ESP32 connection status
+- Config auto-save, no need to re-enter next time
+
+---
+
+#### Method B: PlatformIO CLI Command-Line Flashing
 
 No VSCode plugin required — compile and flash directly from the command line with the best compatibility.
 
@@ -592,7 +661,7 @@ Normal startup log:
 - ESP32 and PC must be on the same LAN
 - **Press the BOOT button to wake, then just start talking** (no need to hold, VAD auto-detects)
 
-#### Method B: VSCode + PlatformIO Plugin Flashing
+#### Method C: VSCode + PlatformIO Plugin Flashing
 
 1. Install [VSCode](https://code.visualstudio.com/) + [PlatformIO IDE Plugin](https://platformio.org/install/ide?install=vscode)
 2. Open the `esp32/minibox_firmware/` folder in VSCode
