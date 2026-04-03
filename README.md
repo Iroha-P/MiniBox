@@ -1,14 +1,28 @@
-**🌐 Language / 语言切换：** [中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
+<div align="center">
 
-# MiniBox — GPT-SoVITS 角色语音聊天机器人
+# MiniBox 角色扮演语音聊天机器人
+
+> *"就像好酒，我们的回忆，只会随着时间越放越甘甜"*
 
 **超かぐや姫！ 超時空輝夜姫！ — 月読空間へようこそ**
 
-基于 GPT-SoVITS 本地语音合成 + 云端大语言模型（LLM）的**角色扮演语音聊天机器人**。
+打造属于你的专属角色语音聊天空间 —— 训练你喜欢的角色声音，与 TA 自由对话
 
-支持 PC 网页端实时对话，也可通过 ESP32-S3 硬件嵌入手办底座，实现**实体手办语音交互**。
+基于 GPT-SoVITS 本地语音合成 + 云端 LLM，支持 PC 网页端实时对话，也可通过 ESP32-S3 硬件嵌入手办底座，实现实体手办语音交互。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
+[![ESP32](https://img.shields.io/badge/Hardware-ESP32--S3-orange.svg)]()
+[![GitHub release](https://img.shields.io/github/v/release/Iroha-P/MiniBox)](https://github.com/Iroha-P/MiniBox/releases)
+
+**🌐 Language / 语言切换：** [中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
 
 [演示视频](#demo--演示视频) · [快速开始](#quick-start--快速开始) · [配置说明](#️-需要修改的配置项重要) · [自定义角色](#自定义角色--打造你自己的-ip-角色) · [ESP32 硬件](#esp32-手办客户端) · [一键烧录](#方式-a一键烧录工具gui最简单) · [FAQ](#faq--常见问题)
+
+</div>
+
+> **⚠️ 本项目仅用于技术学习与个人兴趣创作，不用于商业用途。项目中涉及的角色语音模型与人设仅作为示例，角色版权归原作者及制作方所有。请勿用于侵犯他人权益的场景。**
 
 ---
 
