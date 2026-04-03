@@ -41,20 +41,23 @@ void drawScene(Expr ex, const char* l1, const char* l2 = nullptr);
 void showVolOverlay();
 
 // ==========================================
-//  绘制角色（程序化像素风兔耳）
+//  绘制角色（程序化像素风狐狸）
 //  左侧 32×32 区域
 // ==========================================
 void drawCharacter(Expr ex) {
     // -- 脸 (填充白圆) --
     oled.fillCircle(15, 19, 11, SSD1306_WHITE);
 
-    // -- 兔耳 (填充三角 + 内耳线) --
-    oled.fillTriangle(2, 13, 7, 0, 12, 13, SSD1306_WHITE);
-    oled.fillTriangle(18, 13, 23, 0, 28, 13, SSD1306_WHITE);
-    oled.drawLine(5, 11, 7, 3, SSD1306_BLACK);
-    oled.drawLine(9, 11, 7, 3, SSD1306_BLACK);
-    oled.drawLine(21, 11, 23, 3, SSD1306_BLACK);
-    oled.drawLine(25, 11, 23, 3, SSD1306_BLACK);
+    // -- 狐耳 (宽三角 + 内耳填充) --
+    oled.fillTriangle(0, 15, 5, 0, 14, 15, SSD1306_WHITE);   // 左耳外轮廓
+    oled.fillTriangle(16, 15, 25, 0, 30, 15, SSD1306_WHITE);  // 右耳外轮廓
+    oled.fillTriangle(3, 14, 5, 4, 11, 14, SSD1306_BLACK);    // 左耳内填充
+    oled.fillTriangle(19, 14, 25, 4, 27, 14, SSD1306_BLACK);  // 右耳内填充
+    oled.fillTriangle(4, 13, 5, 6, 10, 13, SSD1306_WHITE);    // 左耳内纹路
+    oled.fillTriangle(20, 13, 25, 6, 26, 13, SSD1306_WHITE);  // 右耳内纹路
+
+    // -- 鼻子 (狐狸小三角鼻) --
+    oled.fillTriangle(14, 21, 16, 21, 15, 19, SSD1306_BLACK);
 
     // -- 眼睛 --
     switch (ex) {
