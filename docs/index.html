@@ -13,13 +13,13 @@
 <body>
   <nav class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="#top">
+      <a class="brand" href="#top" aria-label="MiniBox home">
         <span class="brand-mark">MB</span>
         <span>MiniBox</span>
       </a>
       <div class="links">
         <a href="#demo">Demo</a>
-        <a href="#features">Features</a>
+        <a href="#pipeline">Pipeline</a>
         <a href="#hardware">Hardware</a>
         <a href="#start">Start</a>
         <a href="https://github.com/Iroha-P/MiniBox">GitHub</a>
@@ -32,19 +32,37 @@
       <div class="hero-copy">
         <div class="kicker">GPT-SoVITS / LLM / ESP32-S3</div>
         <h1>MiniBox</h1>
-        <p class="lead">一个角色语音聊天机器人：在 PC Web UI 里完成对话、语音输入、TTS 合成和角色管理，也可以接入 ESP32-S3 做实体硬件交互。</p>
+        <p class="lead">一个角色语音聊天机器人工作台：在本地 Web UI 里管理角色、语音输入、LLM 对话和 TTS 输出，也能接入 ESP32-S3 做实体设备交互。</p>
         <div class="actions">
           <a class="button primary" href="https://github.com/Iroha-P/MiniBox">Open repository</a>
           <a class="button" href="#demo">Watch demo</a>
         </div>
       </div>
-      <div class="stage" aria-label="MiniBox character preview">
-        <img class="character normal" src="assets/yachiyo_normal.png" alt="MiniBox character normal state">
-        <img class="character happy" src="assets/yachiyo_happy.png" alt="MiniBox character happy state">
-        <div class="voice-card">
-          <span>Voice session</span>
-          <strong>Listening -> thinking -> speaking</strong>
-          <div class="wave"><i></i><i></i><i></i><i></i><i></i></div>
+
+      <div class="console" aria-label="MiniBox voice workspace preview">
+        <div class="console-top">
+          <span></span><span></span><span></span>
+          <strong>MiniBox Voice Console</strong>
+        </div>
+        <div class="console-grid">
+          <aside class="voice-rail">
+            <span class="rail-label">SESSION</span>
+            <div class="rail-field">role: Yachiyo</div>
+            <div class="rail-field">tts: GPT-SoVITS</div>
+            <div class="rail-field">input: microphone</div>
+            <div class="rail-field">client: ESP32-S3</div>
+          </aside>
+          <div class="character-stage">
+            <img class="demo-preview" src="assets/demo_pc_thumbnail.jpg" alt="MiniBox Web UI preview">
+            <div class="assistant-dock">
+              <img class="character normal" src="assets/yachiyo_normal.png" alt="MiniBox character normal state">
+              <div class="speech-panel">
+                <small>VOICE LOOP</small>
+                <strong>Listening -> thinking -> speaking</strong>
+                <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -52,10 +70,10 @@
 
   <main>
     <section id="demo">
-      <div class="wrap split">
-        <div>
+      <div class="wrap section-grid">
+        <div class="section-heading">
           <span class="tag">PC Web UI</span>
-          <h2>语音对话工作台。</h2>
+          <h2>把对话、声音和角色状态放在一个界面里。</h2>
           <p class="section-copy">MiniBox 的核心界面运行在本地浏览器里，负责 LLM 对话、GPT-SoVITS / MiniMax / Edge-TTS 声音输出、麦克风输入和角色模型切换。</p>
         </div>
         <div class="video-shell">
@@ -66,32 +84,32 @@
       </div>
     </section>
 
-    <section id="features" class="soft">
+    <section id="pipeline" class="band">
       <div class="wrap">
-        <div class="section-head">
-          <span class="tag">Core Features</span>
-          <h2>从角色设定到语音输出，一套闭环。</h2>
+        <div class="section-heading compact">
+          <span class="tag">Voice Pipeline</span>
+          <h2>从一句话到角色回应。</h2>
         </div>
-        <div class="feature-grid">
+        <div class="pipeline">
           <article>
             <b>01</b>
-            <strong>角色语音对话</strong>
-            <p>使用 GPT-SoVITS 本地合成高质量角色语音，LLM 负责持续对话和上下文。</p>
+            <strong>听见</strong>
+            <p>麦克风录音进入识别流程，适合桌面端和硬件端触发。</p>
           </article>
           <article>
             <b>02</b>
-            <strong>多 TTS 引擎</strong>
-            <p>支持 GPT-SoVITS、MiniMax 和 Edge-TTS，根据本地或云端场景切换声音方案。</p>
+            <strong>理解</strong>
+            <p>LLM 按角色设定和上下文生成回复，保留连续聊天状态。</p>
           </article>
           <article>
             <b>03</b>
-            <strong>麦克风输入</strong>
-            <p>从录音到语音识别再到自动回复，适合做自然的实时聊天体验。</p>
+            <strong>发声</strong>
+            <p>GPT-SoVITS、MiniMax 或 Edge-TTS 生成角色语音。</p>
           </article>
           <article>
             <b>04</b>
-            <strong>REST API</strong>
-            <p>内置 `/api/voice_chat`，方便第三方客户端、硬件底座或其他本地工具接入。</p>
+            <strong>显示</strong>
+            <p>Web UI 和 ESP32 屏幕同步展示状态、文字与播放进度。</p>
           </article>
         </div>
       </div>
@@ -102,11 +120,11 @@
         <div class="hardware-visual">
           <img src="assets/flash_tool_screenshot.png" alt="MiniBox ESP32 flash tool screenshot">
         </div>
-        <div>
+        <div class="section-heading">
           <span class="tag">ESP32 Client</span>
           <h2>把语音角色放进实体底座。</h2>
-          <p class="section-copy">ESP32-S3 客户端通过 WiFi 连接 PC 服务，支持按键唤醒、自动语音检测、OLED 状态动画和扬声器播放。仓库内置烧录工具，能配置 WiFi 与服务地址。</p>
-          <div class="mini-list">
+          <p class="section-copy">ESP32-S3 客户端通过 WiFi 连接 PC 服务，支持按键唤醒、自动语音检测、OLED 状态、动画和扬声器播放。仓库内置烧录工具，可配置 WiFi 与服务地址。</p>
+          <div class="parts">
             <span>INMP441 microphone</span>
             <span>MAX98357A speaker amp</span>
             <span>SSD1306 OLED status</span>
@@ -121,7 +139,7 @@
           <span class="tag">Quick Start</span>
           <h2>本地启动，浏览器开始聊天。</h2>
         </div>
-        <div class="steps">
+        <div class="steps" aria-label="MiniBox quick start commands">
           <code>pip install -r requirements.txt</code>
           <code>python webui.py</code>
           <code>http://127.0.0.1:7860</code>
