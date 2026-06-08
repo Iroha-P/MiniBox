@@ -8,6 +8,9 @@
   <meta property="og:title" content="MiniBox">
   <meta property="og:description" content="Character voice chatbot with GPT-SoVITS, LLM role-playing, Web UI and ESP32 hardware client.">
   <meta property="og:image" content="assets/demo_pc_thumbnail.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,25 +31,27 @@
   </nav>
 
   <header id="top" class="hero">
+    <div class="shape square"></div>
+    <div class="shape circle"></div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <div class="kicker">GPT-SoVITS / LLM / ESP32-S3</div>
-        <h1>MiniBox</h1>
-        <p class="lead">一个角色语音聊天机器人工作台：在本地 Web UI 里管理角色、语音输入、LLM 对话和 TTS 输出，也能接入 ESP32-S3 做实体设备交互。</p>
+        <h1><span>Mini</span><span>Box</span></h1>
+        <p class="lead">一个角色语音聊天机器人工作台。本地界面管理角色、语音输入、LLM 对话和 TTS 输出，也能接入 ESP32-S3 实体设备。</p>
         <div class="actions">
           <a class="button primary" href="https://github.com/Iroha-P/MiniBox">Open repository</a>
-          <a class="button" href="#demo">Watch demo</a>
+          <a class="button secondary" href="#demo">Watch demo</a>
         </div>
       </div>
 
-      <div class="console" aria-label="MiniBox voice workspace preview">
+      <div class="console sticker" aria-label="MiniBox voice workspace preview">
         <div class="console-top">
           <span></span><span></span><span></span>
           <strong>MiniBox Voice Console</strong>
         </div>
         <div class="console-grid">
           <aside class="voice-rail">
-            <span class="rail-label">SESSION</span>
+            <span class="rail-label">Session</span>
             <div class="rail-field">role: Yachiyo</div>
             <div class="rail-field">tts: GPT-SoVITS</div>
             <div class="rail-field">input: microphone</div>
@@ -64,6 +69,7 @@
             </div>
           </div>
         </div>
+        <div class="corner-badge">LOCAL</div>
       </div>
     </div>
   </header>
@@ -76,7 +82,7 @@
           <h2>把对话、声音和角色状态放在一个界面里。</h2>
           <p class="section-copy">MiniBox 的核心界面运行在本地浏览器里，负责 LLM 对话、GPT-SoVITS / MiniMax / Edge-TTS 声音输出、麦克风输入和角色模型切换。</p>
         </div>
-        <div class="video-shell">
+        <div class="video-shell sticker alt">
           <video controls poster="assets/demo_pc_thumbnail.jpg">
             <source src="assets/demo_pc.mp4" type="video/mp4">
           </video>
@@ -117,7 +123,7 @@
 
     <section id="hardware">
       <div class="wrap hardware-grid">
-        <div class="hardware-visual">
+        <div class="hardware-visual sticker">
           <img src="assets/flash_tool_screenshot.png" alt="MiniBox ESP32 flash tool screenshot">
         </div>
         <div class="section-heading">
@@ -136,7 +142,7 @@
     <section id="start" class="start-band">
       <div class="wrap start-inner">
         <div>
-          <span class="tag">Quick Start</span>
+          <span class="tag invert">Quick Start</span>
           <h2>本地启动，浏览器开始聊天。</h2>
         </div>
         <div class="steps" aria-label="MiniBox quick start commands">
